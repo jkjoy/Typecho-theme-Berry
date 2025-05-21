@@ -1,5 +1,4 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-<?php $this->need('head.php'); ?>
 <?php $this->need('header.php'); ?>
 <?php
     $categoryImage = '';
@@ -16,7 +15,6 @@
 <header class="term--header">
 <?php if ($this->is('category')): ?>
 <img src="<?php echo $categoryImage; ?>" alt="<?php echo $categoryName; ?>" class="term--image">
-<?php endif; ?>
 <div class="term--header__content">
 <h1 class="term--title"><?php $this->archiveTitle(array(
             'category'  =>  _t('  <span> %s </span> '),
@@ -27,6 +25,16 @@
         ), '', ''); ?></h1>
 <div class="term--description"><p><?php echo $this->getDescription(); ?></p>
 </div>        
+</div>
+<?php endif; ?>
+<div class="term--header__content">
+<h1 class="term--title"><?php $this->archiveTitle(array(
+            'category'  =>  _t('  <span> %s </span> '),
+            'search'    =>  _t('包含关键字<span> %s </span>的文章'),
+            'date'      =>  _t('在 <span> %s </span>发布的文章'),
+            'tag'       =>  _t('标签 <span> %s </span>下的文章'),
+            'author'    =>  _t('作者 <span>%s </span>发布的文章')
+        ), '', ''); ?></h1>       
 </div>
 </header>
 <?php while($this->next()): ?>
