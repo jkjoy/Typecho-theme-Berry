@@ -19,10 +19,6 @@ function themeConfig($form) {
     $form->addInput($addhead);
     $tongji = new Typecho_Widget_Helper_Form_Element_Textarea('tongji', NULL, NULL, _t('统计代码'), _t('支持HTML'));
     $form->addInput($tongji);
-    $showProfile = new Typecho_Widget_Helper_Form_Element_Radio('showProfile',
-    array('0'=> _t('否'), '1'=> _t('是')),
-    '0', _t('是否在文章页面显示作者信息'), _t('选择“是”将在文章页面包含显示作者信息。'));
-    $form->addInput($showProfile);
 } 
 
 /**
