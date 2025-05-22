@@ -86,11 +86,11 @@
 </nav>        
 <?php $this->need('comments.php'); ?>
 <!-- 相关文章-->
+<?php $this->related(6)->to($relatedPosts);if ($relatedPosts->have()): ?>   
 <h3 class="related--posts__title">相关文章</h3>
 <div class="articleRelated">
-<?php $this->related(6)->to($relatedPosts); ?>   
 <?php while ($relatedPosts->next()): ?>
-<div class="articleRelated__item" itemscope="itemscope" itemtype="http://schema.org/Article">
+<div class="articleRelated__item">
 <a href="<?php $relatedPosts->permalink(); ?>" aria-label="<?php $relatedPosts->title(25); ?>">
 <div class="block--images block--images--1"></div>
 <div class="articleRelated__item__title">
@@ -104,7 +104,8 @@
 </a>
 </div>
 <?php endwhile; ?>
-</div>    
+</div> 
+<?php endif; ?>   
 </section>
 <script>
 document.addEventListener('DOMContentLoaded', (event) => {

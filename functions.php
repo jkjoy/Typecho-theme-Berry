@@ -25,6 +25,11 @@ function themeConfig($form) {
     $form->addInput($tongji);
 } 
 
+function themeFields($layout) {
+    $summary= new Typecho_Widget_Helper_Form_Element_Textarea('summary', NULL, NULL, _t('文章摘要'), _t('自定义摘要'));
+    $layout->addItem($summary);
+}
+
 /**
  * 获取文章浏览量
  */
@@ -124,17 +129,7 @@ function get_post_thumbnail($post) {
                 }
                 $all_images[] = $img_url;
             }
-        }        
-        // Markdown
-        preg_match_all('/!\[([^\]]*)\]\(([^\)]+)\)/i', $content, $md_matches);
-        if (!empty($md_matches[2])) {
-            foreach ($md_matches[2] as $img_url) {
-                if (strpos($img_url, 'http') !== 0 && strpos($img_url, '//') !== 0) {
-                    $img_url = Helper::options()->siteUrl . ltrim($img_url, '/');
-                }
-                $all_images[] = $img_url;
-            }
-        }        
+        }            
         // URL直链
         preg_match_all('/(https?:\/\/[^\s<>"\']*?\.(?:jpg|jpeg|png|gif|webp))(\?[^\s<>"\']*)?/i', $content, $url_matches);
         if (!empty($url_matches[1])) {
@@ -207,7 +202,7 @@ function get_thumb($imgUrl, $options) {
         $width = imagesx($src);
         $height = imagesy($src);
         // 计算缩略图尺寸
-        $target_ratio = 1 / 1;
+        $target_ratio = 3 / 2;
         $src_ratio = $width / $height; 
         if ($src_ratio > $target_ratio) {
             $new_height = $height;
@@ -221,7 +216,7 @@ function get_thumb($imgUrl, $options) {
             $src_y = ($height - $new_height) / 2;
         }
         // 计算最终尺寸
-        $scale = min(400/$new_width, 400/$new_height);
+        $scale = min(600/$new_width, 400/$new_height);
         $dst_width = (int)($new_width * $scale);
         $dst_height = (int)($new_height * $scale);
         // 创建目标图像
