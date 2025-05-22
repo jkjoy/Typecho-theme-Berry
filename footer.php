@@ -2,12 +2,13 @@
 <footer class="site-footer">
 <div class="container">
 © <?php echo date('Y'); ?> <?php $this->options->title(); ?>  
-.Made with <a href="https://fatesinger.com" target="_blank">bigfa</a> 
-<span class="cute">♥</span>
-<a href="https://www.imsun.org" target="_blank">Sun</a>
-. 页面加载耗时<?php echo timer_stop();?> 
+<p>页面加载耗时<?php echo timer_stop();?> </p>
 <?php $this->options->tongji(); ?>  
-<br>Powered By <a href="https://typecho.org/" target="_blank">Typecho</a>
+<p>
+Theme <a href="https://github.com/jkjoy/Typecho-theme-Berry" target="_blank">BERRY </a>Made with <a href="https://fatesinger.com" target="_blank">bigfa</a><span class="cute">♥</span>
+<a href="https://www.imsun.org" target="_blank">Sun</a>
+</p>
+Powered By <a href="https://typecho.org/" target="_blank">Typecho</a>
 </div>
 </footer>
 </div>

@@ -37,7 +37,6 @@
     // 初始应用主题
     setTheme(getTheme());
   })();
-
   // ======= 返回顶部按钮与吸顶导航 =======
   (function () {
     // 返回顶部按钮（你需要在页面加一个 .backToTop 按钮）
@@ -57,7 +56,6 @@
         });
       });
     }
-  
     // 吸顶导航（假设头部有 .site--header）
     const header = document.querySelector(".site--header");
     window.addEventListener("scroll", function () {
@@ -68,4 +66,3 @@
       }
     });
   })();
-

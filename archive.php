@@ -26,7 +26,7 @@
 <div class="term--description"><p><?php echo $this->getDescription(); ?></p>
 </div>        
 </div>
-<?php endif; ?>
+<?php else : ?>
 <div class="term--header__content">
 <h1 class="term--title"><?php $this->archiveTitle(array(
             'category'  =>  _t('  <span> %s </span> '),
@@ -34,8 +34,9 @@
             'date'      =>  _t('在 <span> %s </span>发布的文章'),
             'tag'       =>  _t('标签 <span> %s </span>下的文章'),
             'author'    =>  _t('作者 <span>%s </span>发布的文章')
-        ), '', ''); ?></h1>       
+        ), '', ''); ?></h1>     
 </div>
+<?php endif; ?>
 </header>
 <?php while($this->next()): ?>
 <article class="block--list">
@@ -76,12 +77,14 @@
 </nav>    
 </div>
 </section>
-<?php else: ?>   
-    <header class="archive-header u-textAlignCenter">
-        <h3 class="page-title"><span>Sorry</span></h3>
-    </header>
-    <div class="sandraList">
-    <p>很遗憾,未找到您期待的内容</p>
-    </div>           
-        <?php endif; ?>
+<?php else: ?>
+<div class="layoutSingleColumn--wide">
+<section class="error-404 not-found">
+Sorry
+</section>
+</div>        
+<header class="archive-header u-textAlignCenter">
+<span>很遗憾,未找到您期待的内容</span>
+</header>      
+<?php endif; ?>
 <?php $this->need('footer.php'); ?>

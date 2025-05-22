@@ -1,7 +1,7 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <div id="comments" class="comments-area">
     <?php $this->comments()->to($comments); ?>
-    <?php if($this->allow('comment')): ?>
+    <?php $language = isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : '';if($this->allow('comment') && stripos($language, 'zh') > -1): ?>
         <h2 class="comments-title">
             <?php $this->commentsNum('0', '1', '%d'); ?> 条评论
         </h2>
