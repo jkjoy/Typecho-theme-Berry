@@ -3,34 +3,30 @@
  * 一款单栏主题. BERRY 2.0 原作者 bigfa  
  * @package BERRY 2.0
  * @author  老孙 
- * @version 0.1.0
+ * @version 0.2.0
  * @link https://www.imsun.org
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 $this->need('header.php');
-?>
-<?php  
-/** 文章置顶 */
-$sticky = $this->options->sticky; // 置顶的文章id，多个用|隔开
+$sticky = $this->options->sticky;
 $db = Typecho_Db::get();
 $pageSize = $this->options->pageSize;
 if ($sticky && !empty(trim($sticky))) {
-    $sticky_cids = array_filter(explode('|', $sticky)); // 分割文本并过滤空值
+    $sticky_cids = array_filter(explode('|', $sticky));
     if (!empty($sticky_cids)) {
         $sticky_html = " <span class='sticky--post'><svg xmlns='http://www.w3.org/2000/svg' width='16px' height='16px' fill='none' viewBox='0 0 24 24' class='bk'>
 <path fill='#242424' fill-rule='evenodd' d='M12.333 16.993a7.4 7.4 0 0 1-1.686-.12 7.25 7.25 0 1 1 8.047-4.334v.001a7.2 7.2 0 0 1-.632 1.188 7.26 7.26 0 0 1-4.708 3.146l-.07.013q-.466.083-.951.105m.356.979a8.4 8.4 0 0 1-1.377 0l-2.075 5.7a.375.375 0 0 1-.625.13l-2.465-2.604-3.563.41a.375.375 0 0 1-.395-.501l2.645-7.267a8.25 8.25 0 1 1 14.333 0l2.645 7.267a.375.375 0 0 1-.396.5l-3.562-.41-2.465 2.604a.375.375 0 0 1-.625-.13zm5.786-3.109a8.25 8.25 0 0 1-4.775 2.962l1.658 4.554 1.77-1.87.344-.362.496.057 2.558.294zm-12.95 0L3.476 20.5l2.557-.295.497-.057.344.363 1.77 1.87 1.658-4.555a8.25 8.25 0 0 1-4.775-2.961' clip-rule='evenodd'></path>
-</svg>
-置顶 </span> "; // 置顶标题的 html
-        // 清空原有文章的队列
+</svg>置顶</span> ";
+        // 保存原始对象状态
+        $originalRows = $this->row;
+        $originalStack = $this->stack;
+        $originalLength = $this->length;
+        $totalOriginal = $this->getTotal();
+        // 重置当前对象状态
         $this->row = [];
         $this->stack = [];
         $this->length = 0;
-        // 获取总数，并排除置顶文章数量
         if (isset($this->currentPage) && $this->currentPage == 1) {
-            $totalOriginal = $this->getTotal();
-            $stickyCount = count($sticky_cids);
-            $this->setTotal(max($totalOriginal - $stickyCount, 0));
-            // 构建置顶文章的查询
             $selectSticky = $this->select()->where('type = ?', 'post');
             foreach ($sticky_cids as $i => $cid) {
                 if ($i == 0) 
@@ -38,30 +34,51 @@ if ($sticky && !empty(trim($sticky))) {
                 else 
                     $selectSticky->orWhere('cid = ?', $cid);
             }
-            // 获取置顶文章
             $stickyPosts = $db->fetchAll($selectSticky);
-            // 压入置顶文章到文章队列
             foreach ($stickyPosts as &$stickyPost) {
-                $stickyPost['isSticky'] = true;            // 添加置顶标记
-                $stickyPost['stickyHtml'] = $sticky_html;  // 添加置顶HTML
+                $stickyPost['isSticky'] = true;
+                $stickyPost['stickyHtml'] = $sticky_html;
                 $this->push($stickyPost);
             }
             $standardPageSize = $pageSize - count($stickyPosts);
+            if ($standardPageSize <= 0) {
+                $standardPageSize = 0; // 如果置顶文章已经填满或超过一页，则不显示普通文章
+            }
         } else {
+            // 非第一页显示正常数量的文章
             $standardPageSize = $pageSize;
         }
-        // 构建正常文章查询，排除置顶文章
-        $selectNormal = $this->select()
-            ->where('type = ?', 'post')
-            ->where('status = ?', 'publish')
-            ->where('created < ?', time())
-            ->order('created', Typecho_Db::SORT_DESC)
-            ->page(isset($this->currentPage) ? $this->currentPage : 1, $standardPageSize);
-        foreach ($sticky_cids as $cid) {
-            $selectNormal->where('table.contents.cid != ?', $cid);
+        // 查询普通文章
+        if ($this->currentPage == 1) {
+            // 第一页需要排除置顶文章并限制数量
+            $selectNormal = $this->select()
+                ->where('type = ?', 'post')
+                ->where('status = ?', 'publish')
+                ->where('created < ?', time());
+            // 排除所有置顶文章
+            foreach ($sticky_cids as $cid) {
+                $selectNormal->where('table.contents.cid != ?', $cid);
+            }
+            $selectNormal->order('created', Typecho_Db::SORT_DESC)
+                ->limit($standardPageSize)
+                ->offset(0);
+        } else {
+            $offset = ($this->currentPage - 1) * $pageSize - count($sticky_cids);
+            $offset = max($offset, 0); // 确保偏移量不为负
+            $selectNormal = $this->select()
+                ->where('type = ?', 'post')
+                ->where('status = ?', 'publish')
+                ->where('created < ?', time());     
+            // 排除所有置顶文章
+            foreach ($sticky_cids as $cid) {
+                $selectNormal->where('table.contents.cid != ?', $cid);
+            }
+            $selectNormal->order('created', Typecho_Db::SORT_DESC)
+                ->limit($pageSize)
+                ->offset($offset);
         }
     } else {
-        // 如果sticky_cids为空，使用默认查询
+        // 没有有效的置顶文章ID，正常查询
         $selectNormal = $this->select()
             ->where('type = ?', 'post')
             ->where('status = ?', 'publish')
@@ -70,7 +87,7 @@ if ($sticky && !empty(trim($sticky))) {
             ->page(isset($this->currentPage) ? $this->currentPage : 1, $pageSize);
     }
 } else {
-    // 如果没有置顶文章，使用默认查询
+    // 没有设置置顶文章，正常查询
     $selectNormal = $this->select()
         ->where('type = ?', 'post')
         ->where('status = ?', 'publish')
@@ -78,21 +95,22 @@ if ($sticky && !empty(trim($sticky))) {
         ->order('created', Typecho_Db::SORT_DESC)
         ->page(isset($this->currentPage) ? $this->currentPage : 1, $pageSize);
 }
-// 登录用户显示私密文章
+// 添加私有文章查询条件
 if ($this->user->hasLogin()) {
     $uid = $this->user->uid;
     if ($uid) {
         $selectNormal->orWhere('authorId = ? AND status = ?', $uid, 'private');
     }
 }
+// 获取普通文章
 $normalPosts = $db->fetchAll($selectNormal);
-// 如果之前没有清空队列（没有置顶文章的情况），现在清空
+// 如果没有置顶文章或在前面的代码中没有重置对象状态，则在这里重置
 if (empty($sticky) || empty(trim($sticky)) || empty($sticky_cids)) {
     $this->row = [];
     $this->stack = [];
     $this->length = 0;
 }
-// 压入正常文章到文章队列
+// 将普通文章添加到结果集
 foreach ($normalPosts as $normalPost) {
     $this->push($normalPost);
 }

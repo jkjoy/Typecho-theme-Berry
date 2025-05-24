@@ -7,7 +7,7 @@ function themeConfig($form) {
     $form->addInput($icoUrl);
     $thumbUrl = new Typecho_Widget_Helper_Form_Element_Text('thumbUrl', NULL, NULL, _t('默认缩略图地址'));
     $form->addInput($thumbUrl);
-    $sticky = new Typecho_Widget_Helper_Form_Element_Text('sticky', NULL, NULL, _t('置顶文章cid'), _t('多篇文章以`|`符号隔开'), _t('会在首页展示置顶文章。'));
+    $sticky = new Typecho_Widget_Helper_Form_Element_Text('sticky', NULL, NULL, _t('置顶文章cid'), _t('多篇文章以`|`符号隔开'), _t('首页置顶文章。'));
     $form->addInput($sticky);
     $cnavatar = new Typecho_Widget_Helper_Form_Element_Text('cnavatar', NULL, NULL, _t('Gravatar镜像'), _t('默认https://cravatar.cn/avatar/,可自定义'));
     $form->addInput($cnavatar);
