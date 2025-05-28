@@ -3,7 +3,7 @@
  * 一款单栏主题. BERRY 2.0 原作者 bigfa  
  * @package BERRY 2.0
  * @author  老孙 
- * @version 0.2.0
+ * @version 0.2.1
  * @link https://www.imsun.org
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
@@ -144,6 +144,47 @@ foreach ($normalPosts as $normalPost) {
 <img src="<?php echo htmlspecialchars($cropped_images[$i]); ?>" alt="<?php $this->title() ?>" class="block--image" alt="<?php $this->title() ?>" aria-label="<?php $this->title() ?>">            
 <?php endforeach; ?>
 </div>
+<?php endif; ?>
+<?php if($this->options->showListComments == '1'): ?>
+<?php
+$cid = $this->cid;
+$db = Typecho_Db::get();
+$comments = $db->fetchAll(
+    $db->select()->from('table.comments')
+        ->where('cid = ?', $cid)
+        ->where('status = ?', 'approved')
+        ->where('parent = ?', 0)
+        ->order('created', Typecho_Db::SORT_DESC)
+        ->limit(5)
+);
+if ($comments) {
+    echo '<ul class="commlist">';
+    foreach ($comments as $comment) {
+        $comment_link = $this->permalink . '#comment-' . $comment['coid'];
+        echo '<li>';
+        echo '<span class="comment-content"><a href="' . $comment_link . '">';
+        echo htmlspecialchars($comment['author']) . '：';
+        echo Typecho_Common::subStr(strip_tags($comment['text']), 0, 50, '...');
+        echo '</a></span>';
+        echo '<span class="right"> ';
+        echo date('Y-m-d H:i', $comment['created']);
+        echo '</span>';
+        echo '</li>';
+    }
+    echo '</ul>';
+} else {
+    echo '';
+}
+?>
+<style>
+.commlist li{line-height: 1.5;}
+.commlist {margin-top:5px;margin-bottom:5px;background:var(--berry-background-gray-light);border-radius:5px 5px 0 0;color:#666;position:relative;word-break:break-word;word-wrap:break-word;padding-left: 10px;}
+.commlist::after {content:"";border:10px solid transparent;border-bottom-color:var(--berry-background-gray);position:absolute;top:-1px;left:15px;margin-top:-18px;}
+.commlist .right {float:right;color:var(--berry-text-gray);text-align:right;display:block;margin-right:15px;}
+.commlist li::before {content:none;}
+.comment-content {margin-left:-35px;}
+.comment-content a {text-decoration: none;}
+</style>
 <?php endif; ?>
 <p>
 <a class="more-link" href="<?php $this->permalink() ?>" title="<?php $this->title() ?>" aria-label="<?php $this->title() ?>">read more..</a>

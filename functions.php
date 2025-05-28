@@ -9,6 +9,17 @@ function themeConfig($form) {
     $form->addInput($thumbUrl);
     $sticky = new Typecho_Widget_Helper_Form_Element_Text('sticky', NULL, NULL, _t('置顶文章cid'), _t('多篇文章以`|`符号隔开'), _t('首页置顶文章。'));
     $form->addInput($sticky);
+    $showListComments = new Typecho_Widget_Helper_Form_Element_Radio(
+        'showListComments',
+        array(
+            '1' => _t('是'),
+            '0' => _t('否')
+        ),
+        '0',  // 默认值为0(否)
+        _t('是否在文章列表显示评论数'),
+        _t('启用后将在文章列表显示每条文章的评论数量')
+    );
+    $form->addInput($showListComments);
     $cnavatar = new Typecho_Widget_Helper_Form_Element_Text('cnavatar', NULL, NULL, _t('Gravatar镜像'), _t('默认https://cravatar.cn/avatar/,可自定义'));
     $form->addInput($cnavatar);
     $telegramurl = new Typecho_Widget_Helper_Form_Element_Text('telegramurl', NULL, 'https://t.me/', _t('Telegram'), _t('电报Telegram链接'));

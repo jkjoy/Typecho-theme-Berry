@@ -5,7 +5,7 @@
 <p>页面加载耗时<?php echo timer_stop();?> </p>
 <?php $this->options->tongji(); ?>  
 <p>
-Theme <a href="https://github.com/jkjoy/Typecho-theme-Berry" target="_blank">BERRY </a>Made with <a href="https://fatesinger.com" target="_blank">bigfa</a><span class="cute">♥</span>
+Theme <a href="https://github.com/jkjoy/Typecho-theme-Berry" target="_blank">Berry </a>Made with <a href="https://fatesinger.com" target="_blank">bigfa</a><span class="cute">♥</span>
 <a href="https://www.imsun.org" target="_blank">Sun</a>
 </p>
 Powered By <a href="https://typecho.org/" target="_blank">Typecho</a>

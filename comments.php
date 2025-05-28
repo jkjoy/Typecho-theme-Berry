@@ -13,7 +13,7 @@
                     'callback' => 'threadedComments'
                 )); ?>
             </ol>
-            <nav class="navigation pagination" aria-label="文章分页">
+            <nav class="navigation pagination" aria-label="评论分页">
                 <?php
                 $comments->pageNav(
                     ' ',
@@ -61,7 +61,7 @@
                     </p>
                 <?php else: ?>
                     <p class="comment-form-author">
-                        <label for="author">显示名称 <span class="required">*</span></label>
+                        <label for="author">昵称 <span class="required">*</span></label>
                         <input id="author" name="author" type="text" value="<?php $this->remember('author'); ?>" size="30" maxlength="245" autocomplete="name" required />
                     </p>
                     <p class="comment-form-email">
@@ -74,7 +74,7 @@
                     </p>
                     <p class="comment-form-cookies-consent">
                         <input id="comment-cookies-consent"  type="checkbox" value="yes" checked />
-                        <label for="comment-cookies-consent">在此浏览器中保存我的显示名称、邮箱地址和网站地址，以便下次评论时使用。</label>
+                        <label for="comment-cookies-consent">在此浏览器中保存我的昵称、邮箱地址和网站地址，以便下次评论时使用。</label>
                     </p>
                 <?php endif; ?>
                 <p class="form-submit">

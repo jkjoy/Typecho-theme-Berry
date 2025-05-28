@@ -1,20 +1,15 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
 <?php $this->need('header.php'); ?>
-<?php
-    $categoryImage = '';
-    if ($this->categories) {
-        $category = $this->categories[0];
-        $categoryId = $category['mid'];
-        $categoryName = $category['name'];
-        $themeUrl = Helper::options()->themeUrl . '/img/';
-        $categoryImage = $themeUrl . $categoryId . '.png';
-    }
+<?php //注释掉分类图片的代码
+    //$categoryImage = '';if ($this->categories) {$category = $this->categories[0];$categoryId = $category['mid'];$categoryName = $category['name'];$themeUrl = Helper::options()->themeUrl . '/img/';$categoryImage = $themeUrl . $categoryId . '.png';}
 ?>
 <section class="container">
 <?php if ($this->have()): ?>
 <header class="term--header">
 <?php if ($this->is('category')): ?>
-<img src="<?php echo $categoryImage; ?>" alt="<?php echo $categoryName; ?>" class="term--image">
+<!--不显示分类图片
+<img src="<?php //echo $categoryImage; ?>" alt="<?php //echo $categoryName; ?>" class="term--image">
+-->
 <div class="term--header__content">
 <h1 class="term--title"><?php $this->archiveTitle(array(
             'category'  =>  _t('  <span> %s </span> '),
