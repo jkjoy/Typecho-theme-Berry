@@ -162,13 +162,12 @@ if ($comments) {
     foreach ($comments as $comment) {
         $comment_link = $this->permalink . '#comment-' . $comment['coid'];
         echo '<li>';
-        echo '<span class="comment-content"><a href="' . $comment_link . '">';
+        echo '<span class="comment-content"><a href="' . $comment_link . '"><span class="right">';
+        echo date('Y-m-d H:i', $comment['created']);
+        echo '</span>';
         echo htmlspecialchars($comment['author']) . '：';
         echo Typecho_Common::subStr(strip_tags($comment['text']), 0, 50, '...');
         echo '</a></span>';
-        echo '<span class="right"> ';
-        echo date('Y-m-d H:i', $comment['created']);
-        echo '</span>';
         echo '</li>';
     }
     echo '</ul>';
