@@ -3,7 +3,7 @@
  * 一款单栏主题. BERRY 2.0 原作者 bigfa  
  * @package BERRY 2.0
  * @author  老孙 
- * @version 0.2.1
+ * @version 0.2.2
  * @link https://www.imsun.org
  */
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;

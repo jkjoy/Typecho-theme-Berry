@@ -1,7 +1,7 @@
 
 ## 说明
 
-移植 `bigfa `大大的Wordpress主题 `Coffin 2.0` 
+移植 `bigfa `大大的Wordpress主题 `Berry 2.0` 
 
 ## 更新
 
