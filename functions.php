@@ -360,22 +360,29 @@ function get_next_post($archive) {
  */
 function get_permalink($cid) {
     try {
-        // 获取文章对象
         $db = Typecho_Db::get();
         $post = $db->fetchRow($db->select()
             ->from('table.contents')
             ->where('cid = ?', $cid)
-            ->where('status = ?', 'publish'));   
+            ->where('status = ?', 'publish'));
         if (!$post) {
             return '';
         }
-        // 构造文章对象
-        $post['type'] = 'post'; // 确保类型为文章
-        $post = Typecho_Widget::widget('Widget_Abstract_Contents')->filter($post);   
-        // 使用文章对象的 permalink 方法生成链接
-        return $post['permalink'];
+        // 推荐：用 Widget_Archive 获取 permalink
+        $widget = Typecho_Widget::widget('Widget_Archive@permalink', null, ['cid' => $cid]);
+        if (isset($widget->permalink)) {
+            return $widget->permalink;
+        }
+        // 兜底：老写法，filter 返回的数组可能没有 permalink
+        $post['type'] = 'post';
+        $filtered = Typecho_Widget::widget('Widget_Abstract_Contents')->filter($post);
+        if (isset($filtered['permalink'])) {
+            return $filtered['permalink'];
+        }
+        // 最后兜底
+        $options = Helper::options();
+        return $options->siteUrl . '?cid=' . $cid;
     } catch (Exception $e) {
-        // 出现异常时使用最简单的方式
         $options = Helper::options();
         return $options->siteUrl . '?cid=' . $cid;
     }
