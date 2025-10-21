@@ -21,4 +21,5 @@ Powered By <a href="https://typecho.org/" target="_blank" rel="noopener noreferr
 </div>
 <script type="text/javascript" src="<?php $this->options->themeUrl('app.js'); ?>"></script>
 </body>
+<?php $this->footer(); ?>  
 </html>

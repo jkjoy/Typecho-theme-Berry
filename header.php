@@ -7,6 +7,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="renderer" content="webkit">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<?php $this->header(); ?>  
 <title> <?php if($this->_currentPage>1) echo '第 '.$this->_currentPage.' 页 - '; ?>
         <?php $this->archiveTitle(array(
             'category'  =>  _t('分类 %s 下的文章'),
